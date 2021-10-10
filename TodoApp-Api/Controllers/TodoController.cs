@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ToDo_RestApi.Data;
+using ToDo_RestApi.Models;
 
 namespace ToDo_RestApi.Controllers
 {
@@ -27,5 +28,31 @@ namespace ToDo_RestApi.Controllers
 
             return Ok(items);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTodoItem(TodoItem data)
+        {
+            if (ModelState.IsValid)
+            {
+                await _context.Items.AddAsync(data);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetItem", new { data.Id }, data);
+            }
+
+            return new JsonResult("Something went wrong") { StatusCode = 500 };
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetItem(int id)
+        {
+            var item = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (item == null)
+                return NotFound();
+
+            return Ok(item);
+        }
+
     }
 }
