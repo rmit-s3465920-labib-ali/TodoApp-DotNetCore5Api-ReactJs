@@ -44,7 +44,8 @@ input.taskCheckbox:checked:after {
 }
 
 input.taskCheckbox + label.taskLabel {
-	color: black;
+  color: blueviolet;
+  font-weight: bold;
 }
 
 input.taskCheckbox:checked + label.taskLabel {
