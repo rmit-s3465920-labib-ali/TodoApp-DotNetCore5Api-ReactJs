@@ -24,7 +24,7 @@ namespace ToDo_RestApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTodoItems()
         {
-            var items = _context.Items.ToListAsync();
+            var items = await _context.Items.ToListAsync();
 
             return Ok(items);
         }
@@ -52,6 +52,30 @@ namespace ToDo_RestApi.Controllers
                 return NotFound();
 
             return Ok(item);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateItem(int id, TodoItem item)
+        {
+            if(id != item.Id)
+            {
+                return BadRequest();
+            }
+
+            var existItem = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existItem == null)
+                return NotFound();
+
+            //Todo: Setup AutoMapper for this later.
+            existItem.Title = item.Title;
+            existItem.Description = item.Description;
+            existItem.Done = item.Done;
+
+            // Implement the changes on the database level
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
     }
