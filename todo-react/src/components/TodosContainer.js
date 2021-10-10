@@ -22,7 +22,7 @@ class TodosContainer extends Component {
 
   createTodo = (e) => {
     if (e.key === 'Enter') {
-      axios.post('/api/Todo', {todo: {title: e.target.value}})
+      axios.post('/api/Todo', {title: e.target.value, done: false})
       .then(response => {
         const todos = update(this.state.todos, {
           $splice: [[0, 0, response.data]]
@@ -41,7 +41,7 @@ class TodosContainer extends Component {
   }
 
   updateTodo = (e, id) => {
-    axios.put(`/api/Todo/${id}`, {todo: {"id": id, "done": e.target.checked}})
+    axios.put(`/api/Todo/${id}`, {"id": id, "done": e.target.checked})
     .then(response => {
       const todoIndex = this.state.todos.findIndex(x => x.id === response.data.id)
       const todos = update(this.state.todos, {
@@ -55,6 +55,19 @@ class TodosContainer extends Component {
   }
 
 
+  deleteTodo = (id) => {
+    axios.delete(`/api/Todo/${id}`)
+    .then(response => {
+      const todoIndex = this.state.todos.findIndex(x => x.id === id)
+      const todos = update(this.state.todos, {
+        $splice: [[todoIndex, 1]]
+      })
+      this.setState({
+        todos: todos
+      })
+    })
+    .catch(error => console.log(error))
+  }
 
 
 
@@ -89,7 +102,9 @@ class TodosContainer extends Component {
 			<label className="taskLabel">{todo.title}:</label>
             <br/>
             <label>{todo.description}</label>
-			<span className="deleteTaskBtn">x</span>
+			<span className="deleteTaskBtn" onClick={(e) => this.deleteTodo(todo.id)}>
+                x
+            </span>
 		      </li>
 		    )       
 		  })} 	    
