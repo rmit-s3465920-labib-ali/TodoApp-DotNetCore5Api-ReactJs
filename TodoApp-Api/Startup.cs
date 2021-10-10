@@ -24,10 +24,20 @@ namespace TodoApp_Api
         }
 
         public IConfiguration Configuration { get; }
+        public readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy(MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost:3000")
+                      .AllowAnyMethod()
+                       .AllowAnyHeader();
+                      }));
+
 
             services.AddDbContext<ApiDbContext>(options =>
                 options.UseSqlite(
@@ -54,7 +64,7 @@ namespace TodoApp_Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

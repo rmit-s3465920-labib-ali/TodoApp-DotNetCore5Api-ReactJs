@@ -78,5 +78,20 @@ namespace ToDo_RestApi.Controllers
             return NoContent();
         }
 
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(int id)
+        {
+            var existItem = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existItem == null)
+                return NotFound();
+
+            _context.Items.Remove(existItem);
+            await _context.SaveChangesAsync();
+
+            return Ok(existItem);
+        }
+
     }
 }
