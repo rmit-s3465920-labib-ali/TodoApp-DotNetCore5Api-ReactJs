@@ -1,14 +1,14 @@
 Backend Technologies:
-ASP.NET Core 5 REST API
-EntityFrameworkCore 5.0.10
-Sqlite
+1. ASP.NET Core 5 REST API
+2. EntityFrameworkCore 5.0.10
+3. Sqlite
 
 Front-End Technologies:
-ReactJs 
-Axios
-Immutability helper
-HTML
-CSS
+1. ReactJs 
+2. Axios
+3. Immutability helper
+4. HTML
+5. CSS
 
 
 Improvements Required:
